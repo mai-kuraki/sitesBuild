@@ -1,11 +1,15 @@
 import React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Insert from './Insert';
+import Pages from './Pages';
+import Theme from './Theme';
+
 export default class Drawer extends React.Component{
     constructor(props) {
         super();
         this.state = {
-            activeTab: 0,
+            activeTab: 2,
         }
     }
 
@@ -14,6 +18,7 @@ export default class Drawer extends React.Component{
     }
 
     render() {
+        const {activeTab} = this.state;
         return (
             <div id="drawer">
                 <Tabs
@@ -28,6 +33,9 @@ export default class Drawer extends React.Component{
                     <Tab label="页面" />
                     <Tab label="主题背景" />
                 </Tabs>
+                {activeTab === 0 && <Insert/>}
+                {activeTab === 1 && <Pages/>}
+                {activeTab === 2 && <Theme/>}
             </div>
         )
     }

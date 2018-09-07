@@ -3,7 +3,8 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
-import SubtitlesIcon from '@material-ui/icons/Subtitles';
+import WebIcon from '@material-ui/icons/Web';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import UndoIcon from '@material-ui/icons/Undo';
 import RedoIcon from '@material-ui/icons/Redo';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -21,12 +22,18 @@ export default class Main extends React.Component {
         this.state = {
             siteName: '未命名网站',
             anchorEl: null,
+            anchorMoreEl: null,
             options: [
                 '网站分析',
                 '复制网站',
                 '添加网站图标',
                 '自定义网址'
-            ]
+            ],
+            publishOptions: [
+                '复制网站链接',
+                '查看发布网站',
+                '取消发布'
+            ],
         }
     }
 
@@ -44,17 +51,26 @@ export default class Main extends React.Component {
         this.setState({anchorEl: null});
     };
 
+    publishMoreOpen(e) {
+        this.setState({anchorMoreEl: e.currentTarget});
+    };
+
+    publishMoreClose(e) {
+        this.setState({anchorMoreEl: null});
+    };
+
 
     render() {
-        const {anchorEl, options} = this.state;
+        const {anchorEl, anchorMoreEl, options, publishOptions} = this.state;
         const open = Boolean(anchorEl);
+        const openMore = Boolean(anchorMoreEl);
         return (
             <div id="main">
                 <div className="paper-header">
                     <div className="left">
                     <a href="" className="logo">
                         <IconButton aria-label="site">
-                            <SubtitlesIcon style={{color: '#3f51b5', fontSize: '32px'}}/>
+                            <WebIcon style={{color: '#3f51b5', fontSize: '32px'}}/>
                         </IconButton>
                     </a>
                     <div className="site-name">
@@ -114,7 +130,7 @@ export default class Main extends React.Component {
                                 </IconButton>
                             </Tooltip>
                             <Menu
-                                id="long-menu"
+                                id="actionMore-menu"
                                 anchorEl={anchorEl}
                                 open={open}
                                 onClose={this.moreClose.bind(this)}
@@ -132,9 +148,31 @@ export default class Main extends React.Component {
                                 ))}
                             </Menu>
                         </div>
+                        <Tooltip title="发布">
                         <Button variant="contained" color="primary" className="publish">
                             发布
                         </Button>
+                        </Tooltip>
+                        <React.Fragment>
+                            <Tooltip title="发布选项">
+                            <Button variant="contained" color="primary" className="publish-more"
+                                    aria-owns={openMore ? 'render-publish-menu' : null}
+                                    aria-haspopup="true"
+                                    onClick={this.publishMoreOpen.bind(this)}
+                            >
+                                <ArrowDropDownIcon />
+                            </Button>
+                            </Tooltip>
+                            <Menu id="render-publish-menu" anchorEl={anchorMoreEl} open={openMore} onClose={this.publishMoreClose.bind(this)}>
+                                {
+                                    publishOptions.map((option, k) => {
+                                        return (
+                                        <MenuItem key={k} style={{fontSize: '14px'}} onClick={this.publishMoreClose.bind(this)}>{option}</MenuItem>
+                                        )
+                                    })
+                                }
+                            </Menu>
+                        </React.Fragment>
                     </div>
                 </div>
                 <MainPanel/>
